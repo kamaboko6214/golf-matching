@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "rdbg",
+        "name": "Attach to Rails (Docker)",
+        "request": "attach",
+        "host": "127.0.0.1",
+        "port": 12345,
+        "autoAttach": false,
+        "useTerminal": false
+      }
+    ]
+  }

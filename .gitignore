@@ -1,0 +1,13 @@
+# 環境変数（絶対にコミットしない）
+.env
+
+# Docker
+.DS_Store
+
+# frontend
+frontend/node_modules/
+
+# backend
+backend/tmp/
+backend/log/
+backend/storage/
