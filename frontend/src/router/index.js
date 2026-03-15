@@ -3,8 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: () => import('../pages/HomePage.vue'),
+    redirect: '/matches'
   },
   {
     path: '/login',
@@ -15,6 +14,18 @@ const routes = [
     path: '/matches',
     name: 'Matches',
     component: () => import('../pages/MatchesPage.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/matches/new',
+    name: 'MatchesNew',
+    component: () => import('../pages/MatchesNewPage.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/matches/:id',
+    name: 'MatchesShow',
+    component: () => import('../pages/MatchesShowPage.vue'),
     meta: { requiresAuth: true },
   },
 ]
