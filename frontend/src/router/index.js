@@ -28,6 +28,24 @@ const routes = [
     component: () => import('../pages/MatchesShowPage.vue'),
     meta: { requiresAuth: true },
   },
+  {
+    path: '/chats',
+    name: 'Chats',
+    component: () => import('../pages/ChatsPage.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/chats/:id',
+    name: 'ChatsShow',
+    component: () => import('../pages/ChatsShowPage.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/mypage',
+    name: 'MyPage',
+    component: () => import('../pages/MyPage.vue'),
+    meta: { requiresAuth: true },
+  },
 ]
 
 const router = createRouter({

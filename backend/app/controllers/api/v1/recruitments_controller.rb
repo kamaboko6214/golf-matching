@@ -6,7 +6,7 @@ class Api::V1::RecruitmentsController < ApplicationController
     recruitments = Recruitment.open
                               .includes(user: :profile)
                               .order(created_at: :desc)
-    render json: recruitments.map { |r| recruitment_json(r) }
+    render json: recruitments.map { |r| recruitment_json(r, current_user) }
   end
   
   def show
@@ -69,14 +69,30 @@ class Api::V1::RecruitmentsController < ApplicationController
       status: recruitment.status,
       created_at: recruitment.created_at,
       user: {
-        
         id: recruitment.user.id,
         email: recruitment.user.email,
         name: recruitment.user.profile&.name
       },
       participations_count: recruitment.participations.count,
+      my_chat_id: recruitment.chat_id,
       my_participation: viewer ? recruitment.participations.find_by(user: viewer)&.status : nil,
-      is_owner: viewer ? recruitment.user_id == viewer.id : false
+      is_owner: viewer ? recruitment.user_id == viewer.id : false,
+      participations: viewer && recruitment.user_id == viewer.id ? participations_list(recruitment) : []
     }
+  end
+  
+  def participations_list(recruitment)
+    recruitment.participations.includes(user: :profile).map do |p|
+      {
+        id: p.id,
+        status: p.status,
+        chat_id: p.chat_id,
+        user: {
+          id: p.user.id,
+          email: p.user.email,
+          name: p.user.profile&.name
+        }
+      }
+    end
   end
 end
