@@ -13,7 +13,9 @@ Rails.application.routes.draw do
           sessions: "api/v1/users/sessions",
           registrations: "api/v1/users/registrations"
         }
-        resources :recruitments, only: [:index, :show, :create, :update, :destroy]
+        resources :recruitments, only: [:index, :show, :create, :update, :destroy] do
+          resources :participations, only: [:create]
+        end        
         resource :profile, only: [:show, :update, :create]
         resources :participations, only: [:create, :update]
         resources :chats, only: [:index, :show] do
