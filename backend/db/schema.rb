@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_03_15_085042) do
+ActiveRecord::Schema[7.1].define(version: 2026_03_21_083210) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,6 +52,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_15_085042) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "chat_id"
+    t.index ["chat_id"], name: "index_participations_on_chat_id"
     t.index ["recruitment_id"], name: "index_participations_on_recruitment_id"
     t.index ["user_id"], name: "index_participations_on_user_id"
   end
@@ -78,6 +80,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_15_085042) do
     t.string "status", default: "open"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "chat_id"
+    t.index ["chat_id"], name: "index_recruitments_on_chat_id"
     t.index ["user_id"], name: "index_recruitments_on_user_id"
   end
 
@@ -97,8 +101,10 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_15_085042) do
   add_foreign_key "chat_members", "users"
   add_foreign_key "messages", "chats"
   add_foreign_key "messages", "users"
+  add_foreign_key "participations", "chats"
   add_foreign_key "participations", "recruitments"
   add_foreign_key "participations", "users"
   add_foreign_key "profiles", "users"
+  add_foreign_key "recruitments", "chats"
   add_foreign_key "recruitments", "users"
 end
