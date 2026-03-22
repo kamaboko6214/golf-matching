@@ -30,9 +30,9 @@
 
           <div class="grid grid-cols-2 gap-4 mt-5 py-4" :style="`border-top: 1px solid var(--border-card);`">
             <div class="flex flex-col gap-1">
-              <span class="label-dark">ハンデ</span>
+              <span class="label-dark">平均スコア</span>
               <span class="text-lg font-black c-text-accent" style="font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.05em;">
-                {{ user.handicap ?? '未設定' }}
+                {{ user.average_score ?? '未設定' }}
               </span>
             </div>
             <div class="flex flex-col gap-1">

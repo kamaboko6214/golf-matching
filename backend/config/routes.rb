@@ -13,7 +13,7 @@ Rails.application.routes.draw do
           registrations: "api/v1/users/registrations"
         }
 
-      resources :recruitments, only: [:index, :show, :create, :update, :destroy] do
+      resources :recruitments, only: [:index, :show, :edit, :create, :update, :destroy] do
         resources :participations, only: [:create]
       end
       resource :profile, only: [:show, :update, :create]

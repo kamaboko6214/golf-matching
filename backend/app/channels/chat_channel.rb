@@ -17,19 +17,23 @@ class ChatChannel < ApplicationCable::Channel
     chat = Chat.find(params[:chat_id])
     return unless chat.users.include?(connection.current_user)
 
-    message = chat.messages.create!(
+    message = chat.messages.new(
       user: connection.current_user,
       body: data["body"]
     )
 
-    ChatChannel.broadcast_to(chat, {
-      id: message.id,
-      body: message.body,
-      user: {
-        id: connection.current_user.id,
-        name: connection.current_user.profile&.name || connection.current_user.email
-      },
-      created_at: message.created_at
-    })
+    if message.save
+      ChatChannel.broadcast_to(chat, {
+        id: message.id,
+        body: message.body,
+        user: {
+          id: connection.current_user.id,
+          name: connection.current_user.profile&.name || connection.current_user.email
+        },
+        created_at: message.created_at
+      })
+    else
+      transmit({ error: message.errors.full_messages })
+    end
   end
 end

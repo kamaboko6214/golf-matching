@@ -29,6 +29,12 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: '/matches/:id/edit',
+    name: 'MatchesEdit',
+    component: () => import('../pages/match/MatchesEditPage.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
     path: '/chats',
     name: 'Chats',
     component: () => import('../pages/chat/ChatsPage.vue'),

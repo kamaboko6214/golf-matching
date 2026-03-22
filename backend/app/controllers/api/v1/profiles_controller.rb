@@ -31,14 +31,14 @@ class Api::V1::ProfilesController < ApplicationController
   private
 
   def profile_params
-    params.require(:profile).permit(:name, :handicap, :prefecture, :bio)
+    params.require(:profile).permit(:name, :average_score, :prefecture, :bio)
   end
 
   def profile_json(profile)
     {
       id: profile.id,
       name: profile.name,
-      handicap: profile.handicap,
+      average_score: profile.average_score,
       prefecture: profile.prefecture,
       bio: profile.bio,
       email: current_user.email

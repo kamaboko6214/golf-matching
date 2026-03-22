@@ -1,0 +1,29 @@
+ja:
+  activerecord:
+    models:
+      message: "メッセージ"
+      notification: "通知"
+      participation: "参加申請"
+      profile: "プロフィール"
+      recruitment: "募集"
+    attributes:
+      message:
+        body: "本文"
+      notification:
+        title: "タイトル"
+        body: "本文"
+      participation:
+        status: "ステータス"
+      profile:
+        name: "名前"
+        average_score: "平均スコア"
+        bio: "自己紹介"
+        prefecture: "都道府県"
+      recruitment:
+        title: "タイトル"
+        description: "説明"
+        course_name: "コース名"
+        needed_players: "募集人数"
+        play_date: "プレー日"
+        prefecture: "都道府県"
+        status: "ステータス"

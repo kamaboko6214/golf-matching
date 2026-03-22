@@ -31,8 +31,8 @@
 
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-1.5">
-            <label class="label-dark">ハンデ</label>
-            <InputNumber v-model="form.handicap" :min="0" :max="54" placeholder="18" class="w-full" />
+            <label class="label-dark">平均スコア</label>
+            <InputNumber v-model="form.average_score" :min="50" :max="200" placeholder="90" class="w-full" />
           </div>
           <div class="flex flex-col gap-1.5">
             <label class="label-dark">都道府県</label>
@@ -83,7 +83,7 @@
 
   const form = ref({
     name: '',
-    handicap: null,
+    average_score: null,
     prefecture: '',
     bio: '',
   })
@@ -94,7 +94,7 @@
       if (res.data) {
         form.value = {
           name: res.data.name || '',
-          handicap: res.data.handicap,
+          average_score: res.data.average_score,
           prefecture: res.data.prefecture || '',
           bio: res.data.bio || '',
         }
