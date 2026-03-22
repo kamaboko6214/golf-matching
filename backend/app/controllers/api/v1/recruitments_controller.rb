@@ -3,9 +3,7 @@ class Api::V1::RecruitmentsController < ApplicationController
   before_action :set_recruitment, only: [:show, :update, :destroy]
   
   def index
-    recruitments = Recruitment.open
-                              .includes(user: :profile)
-                              .order(created_at: :desc)
+    recruitments = Recruitment.search(search_params).includes(user: :profile)
     render json: recruitments.map { |r| recruitment_json(r, current_user) }
   end
   
@@ -49,10 +47,14 @@ class Api::V1::RecruitmentsController < ApplicationController
     @recruitment = Recruitment.find(params[:id])
   end
 
+  def search_params
+    params.permit(:prefecture, :from_date, :to_date, :keyword)
+  end
+
   def recruitment_params
     params.require(:recruitment).permit(
       :title, :description, :play_date,
-      :course_name, :prefecture, :needed_players
+      :course_name, :prefecture, :needed_players, :image
     )
   end
 
@@ -77,7 +79,8 @@ class Api::V1::RecruitmentsController < ApplicationController
       my_chat_id: recruitment.chat_id,
       my_participation: viewer ? recruitment.participations.find_by(user: viewer)&.status : nil,
       is_owner: viewer ? recruitment.user_id == viewer.id : false,
-      participations: viewer && recruitment.user_id == viewer.id ? participations_list(recruitment) : []
+      participations: viewer && recruitment.user_id == viewer.id ? participations_list(recruitment) : [],
+      image_url: recruitment.image.attached? ? url_for(recruitment.image) : nil
     }
   end
   

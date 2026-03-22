@@ -12,6 +12,7 @@
     "@primevue/themes": "^4.5.4",
     "@rails/actioncable": "^8.1.200",
     "axios": "^1.6.0",
+    "leaflet": "^1.9.4",
     "pinia": "^2.1.7",
     "primeicons": "^7.0.0",
     "primevue": "^4.5.4",

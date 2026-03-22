@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::API
+  include Rails.application.routes.url_helpers
   before_action :configure_permitted_parameters, if: :devise_controller?
-
+  
   def authenticate_user!
     authenticate_api_v1_user!
   end

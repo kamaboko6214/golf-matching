@@ -20,6 +20,15 @@ class Api::V1::ParticipationsController < ApplicationController
       status: :pending
     )
 
+    # 参加申請があったことを募集の作成者に通知
+    Notification.create!(
+      user: recruitment.user,
+      title: "参加申請が届きました",
+      body: "「#{recruitment.title}」に#{current_user.profile&.name || current_user.email}さんから参加申請が届きました",
+      read: false,
+      notifiable: recruitment
+    )
+
     render json: {
       id: participation.id,
       status: participation.status,
@@ -45,6 +54,23 @@ class Api::V1::ParticipationsController < ApplicationController
     # 承認時にチャットルームを作成
     if participation.approved?
       create_chat(participation)
+      # 申請者に承認通知
+      Notification.create!(
+        user: participation.user,
+        title: "参加が承認されました",
+        body: "「#{participation.recruitment.title}」への参加が承認されました！チャットを開始しましょう",
+        read: false,
+        notifiable: recruitment
+      )
+    else
+      # 申請者に却下通知
+      Notification.create!(
+        user: participation.user,
+        title: "参加申請が却下されました",
+        body: "「#{participation.recruitment.title}」への参加申請が却下されました",
+        read: false,
+        notifiable: participation.recruitment
+      )      
     end
 
     render json:{

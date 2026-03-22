@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find c:UsersklusnOneDriveドキュメントdevelopgolf-matching -type f -name README.md -o -name README.txt -o -name readme.*)"
+    ]
+  }
+}

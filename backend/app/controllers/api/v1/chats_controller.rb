@@ -7,10 +7,21 @@ class Api::V1::ChatsController < ApplicationController
     end
   
     def show
-      chat = current_user.chats.find(params[:id])
+      chat = current_user.chats.includes(:recruitment).find(params[:id])
       messages = chat.messages.includes(user: :profile).order(:created_at)
+      recruitment = chat.recruitment
       render json: {
         id: chat.id,
+        recruitment: recruitment ? {
+          id: recruitment.id,
+          title: recruitment.title,
+          description: recruitment.description,
+          play_date: recruitment.play_date,
+          course_name: recruitment.course_name,
+          prefecture: recruitment.prefecture,
+          needed_players: recruitment.needed_players,
+          status: recruitment.status
+        } : nil,
         messages: messages.map { |m| message_json(m) }
       }
     end

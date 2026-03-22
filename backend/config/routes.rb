@@ -19,6 +19,12 @@ Rails.application.routes.draw do
       resource :profile, only: [:show, :update, :create]
       resource :my_page, only: [:show]
       resources :participations, only: [:update]
+      resources :users, only: [:show]
+      resources :notifications, only: [:index, :update] do
+        collection do
+          patch :mark_all_read
+        end
+      end
       resources :chats, only: [:index, :show] do
         resources :messages, only: [:index, :create]
       end

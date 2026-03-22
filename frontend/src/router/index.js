@@ -13,45 +13,51 @@ const routes = [
   {
     path: '/matches',
     name: 'Matches',
-    component: () => import('../pages/MatchesPage.vue'),
+    component: () => import('../pages/match/MatchesPage.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: '/matches/new',
     name: 'MatchesNew',
-    component: () => import('../pages/MatchesNewPage.vue'),
+    component: () => import('../pages/match/MatchesNewPage.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: '/matches/:id',
     name: 'MatchesShow',
-    component: () => import('../pages/MatchesShowPage.vue'),
+    component: () => import('../pages/match/MatchesShowPage.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: '/chats',
     name: 'Chats',
-    component: () => import('../pages/ChatsPage.vue'),
+    component: () => import('../pages/chat/ChatsPage.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: '/chats/:id',
     name: 'ChatsShow',
-    component: () => import('../pages/ChatsShowPage.vue'),
+    component: () => import('../pages/chat/ChatsShowPage.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: '/mypage',
     name: 'MyPage',
-    component: () => import('../pages/MyPage.vue'),
+    component: () => import('../pages/user/MyPage.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: '/profile',
     name: 'Profile',
-    component: () => import('../pages/ProfilePage.vue'),
+    component: () => import('../pages/user/ProfilePage.vue'),
     meta: { requiresAuth: true },
   },
+  {
+    path: '/users/:id',
+    name: 'UserProfile',
+    component: () => import('../pages/user/UserProfilePage.vue'),
+    meta: { requiresAuth: true },
+  },  
 ]
 
 const router = createRouter({

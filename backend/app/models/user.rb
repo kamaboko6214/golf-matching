@@ -10,4 +10,5 @@ class User < ApplicationRecord
   has_many :chat_members, dependent: :destroy
   has_many :chats, through: :chat_members
   has_many :messages, dependent: :destroy
+  has_many :notifications, dependent: :destroy
 end

@@ -1,3 +1,264 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ── CSS variables: Light mode (default) ── */
+:root {
+  --bg: #f2f8f3;
+  --bg-card: rgba(255, 255, 255, 0.95);
+  --border-card: rgba(34, 197, 94, 0.2);
+  --border-card-hover: rgba(34, 197, 94, 0.45);
+  --shadow-card-hover: 0 0 28px rgba(34, 197, 94, 0.1);
+  --bg-input: #ffffff;
+  --border-input: rgba(34, 197, 94, 0.3);
+  --placeholder: #a3c9aa;
+  --bg-header: rgba(255, 255, 255, 0.97);
+  --border-header: rgba(34, 197, 94, 0.18);
+  --bg-notification: rgba(255, 255, 255, 0.99);
+  --border-notification: rgba(34, 197, 94, 0.15);
+  --notif-unread-bg: rgba(34, 197, 94, 0.07);
+  --bg-select: #ffffff;
+  --bg-chat-other: rgba(240, 249, 240, 0.92);
+  --border-chat-other: rgba(34, 197, 94, 0.2);
+  --bg-chat-input: rgba(255, 255, 255, 0.97);
+  --border-chat-input: rgba(34, 197, 94, 0.2);
+  --bg-drop: rgba(245, 249, 242, 0.85);
+  --border-drop: rgba(34, 197, 94, 0.28);
+  --text: #1a3d1f;
+  --text-muted: #4a7c54;
+  --text-faint: #8ab896;
+  --text-accent: #166534;
+  --text-label: #15803d;
+  --text-title: #1a3d1f;
+  --badge-bg: rgba(34, 197, 94, 0.1);
+  --badge-color: #166534;
+  --badge-border: rgba(34, 197, 94, 0.25);
+  --avatar-bg: rgba(34, 197, 94, 0.08);
+  --avatar-border: rgba(34, 197, 94, 0.22);
+  --scrollbar-track: #e4f2e7;
+  --scrollbar-thumb: #86c494;
+  --scrollbar-thumb-hover: #5da870;
+  --select-option-bg: #ffffff;
+  --primevue-input-bg: #ffffff;
+  --primevue-overlay-bg: #f2f8f3;
+}
+
+/* ── CSS variables: Dark mode ── */
+html.dark {
+  --bg: #102416;
+  --bg-card: rgba(22, 55, 30, 0.75);
+  --border-card: rgba(74, 222, 128, 0.18);
+  --border-card-hover: rgba(163, 230, 53, 0.35);
+  --shadow-card-hover: 0 0 28px rgba(74, 222, 128, 0.1);
+  --bg-input: rgba(12, 30, 16, 0.8);
+  --border-input: rgba(74, 222, 128, 0.25);
+  --placeholder: #3a7048;
+  --bg-header: rgba(14, 32, 18, 0.94);
+  --border-header: rgba(74, 222, 128, 0.15);
+  --bg-notification: rgba(8, 18, 10, 0.97);
+  --border-notification: rgba(74, 222, 128, 0.15);
+  --notif-unread-bg: rgba(74, 222, 128, 0.1);
+  --bg-select: #163320;
+  --bg-chat-other: rgba(22, 55, 30, 0.75);
+  --border-chat-other: rgba(74, 222, 128, 0.18);
+  --bg-chat-input: rgba(22, 55, 30, 0.75);
+  --border-chat-input: rgba(74, 222, 128, 0.18);
+  --bg-drop: rgba(15, 38, 20, 0.6);
+  --border-drop: rgba(74, 222, 128, 0.25);
+  --text: #f0fdf4;
+  --text-muted: #86efac;
+  --text-faint: #3a7048;
+  --text-accent: #a3e635;
+  --text-label: #4ade80;
+  --text-title: #f0fdf4;
+  --badge-bg: rgba(74, 222, 128, 0.12);
+  --badge-color: #4ade80;
+  --badge-border: rgba(74, 222, 128, 0.2);
+  --avatar-bg: rgba(74, 222, 128, 0.08);
+  --avatar-border: rgba(74, 222, 128, 0.2);
+  --scrollbar-track: #142d1a;
+  --scrollbar-thumb: #2d6e3e;
+  --scrollbar-thumb-hover: #3a8a4f;
+  --select-option-bg: #163320;
+  --primevue-input-bg: #122b18;
+  --primevue-overlay-bg: #163320;
+}
+
+@layer base {
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+  ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+}
+
+/* PrimeVue dark overrides */
+.p-inputtext,
+.p-textarea,
+.p-select,
+.p-inputnumber-input,
+.p-datepicker-input {
+  background-color: var(--primevue-input-bg) !important;
+  border-color: var(--border-input) !important;
+  color: var(--text) !important;
+  transition: background-color 0.3s, border-color 0.3s !important;
+}
+
+.p-inputtext:focus,
+.p-textarea:focus,
+.p-inputnumber-input:focus {
+  border-color: #4ade80 !important;
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.12) !important;
+}
+
+.p-inputtext::placeholder,
+.p-textarea::placeholder,
+.p-inputnumber-input::placeholder {
+  color: var(--placeholder) !important;
+}
+
+.p-select-overlay {
+  background-color: var(--primevue-overlay-bg) !important;
+  border-color: var(--border-card) !important;
+}
+
+.p-select-option { color: var(--text) !important; }
+
+.p-select-option:hover,
+.p-select-option.p-select-option-selected {
+  background-color: rgba(74, 222, 128, 0.1) !important;
+  color: var(--text-accent) !important;
+}
+
+.p-select-filter {
+  background-color: var(--primevue-input-bg) !important;
+  border-color: var(--border-input) !important;
+  color: var(--text) !important;
+}
+
+.p-inputnumber-button {
+  background-color: #14532d !important;
+  border-color: var(--border-input) !important;
+  color: #a3e635 !important;
+}
+
+.p-datepicker-panel {
+  background-color: var(--primevue-overlay-bg) !important;
+  border-color: var(--border-card) !important;
+  color: var(--text) !important;
+}
+
+.p-datepicker-day-cell:hover .p-datepicker-day,
+.p-datepicker-day-cell.p-datepicker-day-cell-selected .p-datepicker-day {
+  background-color: #166534 !important;
+  color: #a3e635 !important;
+}
+
+.p-datepicker-header {
+  background-color: var(--primevue-input-bg) !important;
+  color: var(--text) !important;
+}
+
+.p-datepicker-day-view th { color: var(--text-label) !important; }
+
+@layer components {
+  .glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-card);
+    border-radius: 1rem;
+    transition: background 0.3s, border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .glass-card-hover:hover {
+    border-color: var(--border-card-hover);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #a3e635, #84cc16);
+    color: #052e16;
+    font-weight: 900;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.1em;
+    font-size: 1.1rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: filter 0.2s, transform 0.15s;
+    display: inline-block;
+    text-align: center;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .badge-green {
+    background: var(--badge-bg);
+    color: var(--badge-color);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--badge-border);
+  }
+
+  .input-dark {
+    background: var(--bg-input);
+    border: 1px solid var(--border-input);
+    color: var(--text);
+    border-radius: 0.5rem;
+    padding: 0.65rem 1rem;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+  }
+
+  .input-dark::placeholder { color: var(--placeholder); }
+
+  .input-dark:focus {
+    border-color: rgba(74, 222, 128, 0.5);
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.08);
+  }
+
+  .label-dark {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-label);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .page-bg {
+    min-height: 100vh;
+    background: var(--bg);
+    transition: background 0.3s;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.08em;
+    color: var(--text-title);
+  }
+
+  .c-text { color: var(--text); }
+  .c-text-muted { color: var(--text-muted); }
+  .c-text-faint { color: var(--text-faint); }
+  .c-text-accent { color: var(--text-accent); }
+}
