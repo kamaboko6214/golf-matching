@@ -86,13 +86,22 @@
         <div class="glass-card p-6 mb-4">
           <div v-if="recruitment.is_owner" class="text-center">
             <p class="text-sm mb-4" :style="`color: var(--text-muted);`">あなたが投稿した募集です</p>
-            <button
-              v-if="approvedParticipation"
-              @click="$router.push(`/chats/${approvedParticipation.chat_id}`)"
-              class="btn-primary w-full"
-            >
-              💬 チャットを確認する
-            </button>
+            <div class="flex flex-col gap-2">
+              <button
+                @click="$router.push(`/matches/${recruitment.id}/edit`)"
+                class="w-full text-sm font-bold py-2.5 px-4 rounded-xl transition"
+                :style="`border: 1px solid var(--border-card); color: var(--text-muted); background: transparent;`"
+              >
+                ✏️ 編集する
+              </button>
+              <button
+                v-if="approvedParticipation"
+                @click="$router.push(`/chats/${approvedParticipation.chat_id}`)"
+                class="btn-primary w-full"
+              >
+                💬 チャットを確認する
+              </button>
+            </div>
           </div>
 
           <button
@@ -153,7 +162,11 @@
               :style="`border-bottom: 1px solid var(--border-card);`"
             >
               <div>
-                <p class="font-bold text-sm c-text">{{ p.user.name || p.user.email }}</p>
+                <span
+                  @click.stop="$router.push(`/users/${p.user.id}`)" 
+                  class="font-bold text-sm c-text hover:underline cursor-pointer">{{ p.user.name || p.user.email }}
+                </span>
+                  <span class="text-xs text-muted ml-2">さん</span>
                 <span
                   class="text-xs font-bold px-2.5 py-0.5 rounded-full mt-1 inline-block"
                   :class="{
@@ -163,6 +176,9 @@
                   }"
                 >
                   {{ p.status === 'pending' ? '申請中' : p.status === 'approved' ? '承認済み' : '却下' }}
+                </span>
+                <span class="text-xs font-bold right-0 ml-4 px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 border border-gray-200 dark:bg-gray-700/30 dark:text-gray-400 dark:border-gray-600/30">
+                  平均スコア: {{ p.user.average_score ?? '未設定' }}
                 </span>
               </div>
               <div v-if="p.status === 'pending'" class="flex gap-2">

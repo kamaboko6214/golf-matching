@@ -9,7 +9,7 @@ class Api::V1::UsersController < ApplicationController
       id: user.id,
       email: user.email,
       name: profile&.name,
-      handicap: profile&.handicap,
+      average_score: profile&.average_score,
       prefecture: profile&.prefecture,
       bio: profile&.bio,
       recruitments: user.recruitments.open.order(created_at: :desc).limit(5).map do |r|

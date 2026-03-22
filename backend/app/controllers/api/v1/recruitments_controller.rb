@@ -1,6 +1,6 @@
 class Api::V1::RecruitmentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_recruitment, only: [:show, :update, :destroy]
+  before_action :set_recruitment, only: [:show, :edit, :update, :destroy]
   
   def index
     recruitments = Recruitment.search(search_params).includes(user: :profile)
@@ -10,7 +10,15 @@ class Api::V1::RecruitmentsController < ApplicationController
   def show
     render json: recruitment_json(@recruitment, current_user)
   end
-  
+
+  def edit
+    if @recruitment.user_id == current_user.id
+      render json: edit_recruitment_json(@recruitment)
+    else
+      render json: { error: "権限がありません" }, status: :forbidden
+    end
+  end
+
   def create
     recruitment = current_user.recruitments.build(recruitment_params)
     if recruitment.save
@@ -84,6 +92,20 @@ class Api::V1::RecruitmentsController < ApplicationController
     }
   end
   
+  def edit_recruitment_json(recruitment)
+    {
+      id: recruitment.id,
+      title: recruitment.title,
+      description: recruitment.description,
+      play_date: recruitment.play_date,
+      course_name: recruitment.course_name,
+      prefecture: recruitment.prefecture,
+      needed_players: recruitment.needed_players,
+      status: recruitment.status,
+      image_url: recruitment.image.attached? ? url_for(recruitment.image) : nil
+    }
+  end
+
   def participations_list(recruitment)
     recruitment.participations.includes(user: :profile).map do |p|
       {

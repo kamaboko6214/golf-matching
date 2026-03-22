@@ -1,15 +1,19 @@
 <template>
   <div class="page-bg">
     <AppHeader>
-      <router-link to="/matches" class="text-xs font-bold transition" :style="`color: var(--text-muted);`">
-        ← 一覧に戻る
+      <router-link :to="`/matches/${route.params.id}`" class="text-xs font-bold transition" :style="`color: var(--text-muted);`">
+        ← 詳細に戻る
       </router-link>
     </AppHeader>
 
     <main class="max-w-2xl mx-auto px-4 py-8">
-      <h1 class="section-title mb-6" style="font-size: 1.8rem;">募集を投稿する</h1>
+      <h1 class="section-title mb-6" style="font-size: 1.8rem;">募集を編集する</h1>
 
-      <form @submit.prevent="handleSubmit" class="glass-card p-6 flex flex-col gap-5">
+      <div v-if="loading" class="flex justify-center py-20">
+        <div class="w-8 h-8 border-2 rounded-full animate-spin" :style="`border-color: var(--border-card); border-top-color: #a3e635;`"></div>
+      </div>
+
+      <form v-else @submit.prevent="handleSubmit" class="glass-card p-6 flex flex-col gap-5">
 
         <div class="flex flex-col gap-1.5">
           <label class="label-dark">タイトル</label>
@@ -80,12 +84,12 @@
           {{ errorMsg }}
         </div>
 
-        <button type="submit" :disabled="loading" class="btn-primary w-full text-center">
-          <span v-if="loading" class="flex items-center justify-center gap-2">
+        <button type="submit" :disabled="submitting" class="btn-primary w-full text-center">
+          <span v-if="submitting" class="flex items-center justify-center gap-2">
             <span class="w-4 h-4 border-2 border-green-900/30 border-t-green-900 rounded-full animate-spin"></span>
-            投稿中...
+            更新中...
           </span>
-          <span v-else>投稿する</span>
+          <span v-else>更新する</span>
         </button>
 
       </form>
@@ -94,8 +98,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import api from '../../lib/api.js'
 import InputText from 'primevue/inputtext'
 import Textarea from 'primevue/textarea'
@@ -105,8 +109,10 @@ import Select from 'primevue/select'
 import AppHeader from '../../components/AppHeader.vue'
 import { prefectures } from '../../constants/prefectures.js'
 
+const route = useRoute()
 const router = useRouter()
-const loading = ref(false)
+const loading = ref(true)
+const submitting = ref(false)
 const errorMsg = ref('')
 const imagePreview = ref(null)
 const imageFile = ref(null)
@@ -120,9 +126,35 @@ const form = ref({
   prefecture: '',
 })
 
+onMounted(async () => {
+  try {
+    const res = await api.get(`/api/v1/recruitments/${route.params.id}/edit`)
+    const data = res.data
+    form.value = {
+      title: data.title,
+      description: data.description,
+      play_date: data.play_date ? new Date(data.play_date) : null,
+      needed_players: data.needed_players,
+      course_name: data.course_name,
+      prefecture: data.prefecture,
+    }
+    if (data.image_url) {
+      imagePreview.value = data.image_url
+    }
+  } catch (e) {
+    if (e.response?.status === 403) {
+      router.push(`/matches/${route.params.id}`)
+    } else {
+      errorMsg.value = 'データの取得に失敗しました'
+    }
+  } finally {
+    loading.value = false
+  }
+})
+
 const handleSubmit = async () => {
   errorMsg.value = ''
-  loading.value = true
+  submitting.value = true
   try {
     const formData = new FormData()
     formData.append('recruitment[title]', form.value.title)
@@ -137,14 +169,14 @@ const handleSubmit = async () => {
       formData.append('recruitment[image]', imageFile.value)
     }
 
-    await api.post('/api/v1/recruitments', formData, {
+    await api.patch(`/api/v1/recruitments/${route.params.id}`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
-    router.push('/matches')
+    router.push(`/matches/${route.params.id}`)
   } catch (e) {
     errorMsg.value = e.response?.data?.errors?.join(', ') || 'エラーが発生しました'
   } finally {
-    loading.value = false
+    submitting.value = false
   }
 }
 

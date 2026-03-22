@@ -129,8 +129,8 @@
           </div>
           <div class="space-y-2.5 py-4" :style="`border-top: 1px solid var(--border-card);`">
             <div class="flex justify-between items-center">
-              <span class="text-xs" :style="`color: var(--text-muted);`">ハンデ</span>
-              <span class="text-sm font-black c-text-accent">{{ profile?.handicap ?? '未設定' }}</span>
+              <span class="text-xs" :style="`color: var(--text-muted);`">平均スコア</span>
+              <span class="text-sm font-black c-text-accent">{{ profile?.average_score ?? '未設定' }}</span>
             </div>
             <div class="flex justify-between items-center">
               <span class="text-xs" :style="`color: var(--text-muted);`">エリア</span>
