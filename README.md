@@ -7,6 +7,7 @@
 | 層 | 技術 |
 |---|---|
 | バックエンド | Ruby on Rails 7.1 (API mode) |
+| チャット | Action Cable (WebSocket) |
 | フロントエンド | Vue 3 + Vite + Tailwind CSS |
 | データベース | PostgreSQL 16 |
 | 認証 | Devise + devise-jwt (JWT) |
