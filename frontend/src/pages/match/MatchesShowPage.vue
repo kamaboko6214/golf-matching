@@ -95,6 +95,13 @@
                 ✏️ 編集する
               </button>
               <button
+                @click="delete_recruitment()"
+                class="w-full text-sm font-bold py-2 px-4 rounded-xl transition text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30"
+                style="border: 1px solid transparent;"
+              >
+                🗑️ この募集を削除する
+              </button>
+              <button
                 v-if="approvedParticipation"
                 @click="$router.push(`/chats/${approvedParticipation.chat_id}`)"
                 class="btn-primary w-full"
@@ -205,11 +212,12 @@
 
 <script setup>
   import { ref, onMounted, computed } from 'vue'
-  import { useRoute } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
   import api from '../../lib/api.js'
   import AppHeader from '../../components/AppHeader.vue'
 
   const route = useRoute()
+  const router = useRouter()
   const recruitment = ref(null)
   const loading = ref(true)
   const applying = ref(false)
@@ -249,6 +257,16 @@
       recruitment.value = res.data
     } catch (e) {
       errorMsg.value = e.response?.data?.error || 'エラーが発生しました'
+    }
+  }
+
+  async function delete_recruitment() {
+    if (!confirm('この募集を削除しますか？')) return
+    try {
+      await api.delete(`/api/v1/recruitments/${route.params.id}`)
+      router.push('/matches')
+    } catch (e) {
+      errorMsg.value = e.response?.data?.error || '削除に失敗しました'
     }
   }
 
