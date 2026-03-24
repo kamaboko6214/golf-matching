@@ -113,7 +113,16 @@
             <span v-else>{{ mode === 'login' ? 'ログイン' : 'アカウント作成' }}</span>
           </button>
         </form>
-
+        <div class="mt-4 pt-4 border-t border-gray-100">
+          <p class="text-xs text-gray-400 text-center mb-3">テストアカウントで試す</p>
+          <button
+            type="button"
+            @click="loginAsTest"
+            class="w-full border border-green-700 text-green-700 font-bold py-2 rounded-xl text-sm hover:bg-green-50 transition"
+          >
+            テストログイン
+          </button>
+        </div>
         <p v-if="mode === 'login'" class="mt-5 text-center text-[13px] text-[#7a8f73]">
           アカウントをお持ちでない方は
           <a href="#" class="text-[#2d7a35] font-bold no-underline hover:underline" @click.prevent="mode = 'register'">新規登録</a>
@@ -141,7 +150,7 @@ const loading = ref(false)
 const errorMsg = ref('')
 const successMsg = ref('')
 
-async function handleSubmit() {
+const handleSubmit = async () => {
   errorMsg.value = ''
   successMsg.value = ''
 
@@ -171,6 +180,12 @@ async function handleSubmit() {
   } finally {
     loading.value = false
   }
+}
+
+const loginAsTest = () => {
+  email.value = 'test@golf.com'
+  password.value = 'password123'
+  handleSubmit()
 }
 </script>
 
