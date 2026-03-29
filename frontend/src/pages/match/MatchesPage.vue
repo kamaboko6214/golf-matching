@@ -106,10 +106,16 @@
                 <span class="text-xs" :style="`color: var(--text-faint);`">📍 {{ r.course_name }}</span>
                 <span
                   @click.stop="$router.push(`/users/${r.user.id}`)"
-                  class="text-xs cursor-pointer transition hover:underline"
+                  class="text-xs cursor-pointer transition hover:underline inline-flex items-center gap-2 max-w-[55%]"
                   :style="`color: var(--text-muted);`"
                 >
-                  {{ r.user?.name || r.user?.email }}
+                  <img
+                    v-if="r.user?.image_url"
+                    :src="r.user.image_url"
+                    alt=""
+                    class="w-6 h-6 rounded-full object-cover flex-shrink-0 border border-[var(--avatar-border)]"
+                  />
+                  <span class="truncate">{{ r.user?.name || r.user?.email }}</span>
                 </span>
               </div>
             </div>
@@ -122,7 +128,12 @@
         <div class="glass-card p-5 sticky top-20">
           <div class="text-center mb-4">
             <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl" :style="`background: var(--avatar-bg); border: 1px solid var(--avatar-border);`">
-              🏌️
+              <div v-if="profile?.image_url">
+                <img :src="profile?.image_url" class="w-14 h-14 rounded-full object-cover" />
+              </div>
+              <div v-else>
+                <p class="text-3xl mb-2">🏌️</p>
+              </div>
             </div>
             <p class="font-black text-sm c-text">{{ profile?.name || '名前未設定' }}</p>
             <p class="text-xs mt-1" :style="`color: var(--text-faint);`">{{ profile?.email }}</p>

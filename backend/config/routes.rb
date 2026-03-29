@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       resources :recruitments, only: [:index, :show, :edit, :create, :update, :destroy] do
         resources :participations, only: [:create]
       end
-      resource :profile, only: [:show, :update, :create]
+      resource :profile, only: [:show, :update, :create, :change_profile_image]
       resource :my_page, only: [:show]
       resources :participations, only: [:update]
       resources :users, only: [:show]

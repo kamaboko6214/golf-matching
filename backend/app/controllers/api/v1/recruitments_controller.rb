@@ -3,7 +3,7 @@ class Api::V1::RecruitmentsController < ApplicationController
   before_action :set_recruitment, only: [:show, :edit, :update, :destroy]
   
   def index
-    recruitments = Recruitment.search(search_params).includes(user: :profile)
+    recruitments = Recruitment.search(search_params).includes(user: { profile: { image_attachment: :blob } })
     render json: recruitments.map { |r| recruitment_json(r, current_user) }
   end
   
@@ -52,7 +52,7 @@ class Api::V1::RecruitmentsController < ApplicationController
   private
 
   def set_recruitment
-    @recruitment = Recruitment.find(params[:id])
+    @recruitment = Recruitment.includes(user: { profile: { image_attachment: :blob } }).find(params[:id])
   end
 
   def search_params
@@ -81,7 +81,8 @@ class Api::V1::RecruitmentsController < ApplicationController
       user: {
         id: recruitment.user.id,
         email: recruitment.user.email,
-        name: recruitment.user.profile&.name
+        name: recruitment.user.profile&.name,
+        image_url: profile_image_url(recruitment.user.profile)
       },
       participations_count: recruitment.participations.count,
       my_chat_id: recruitment.chat_id,
@@ -106,6 +107,12 @@ class Api::V1::RecruitmentsController < ApplicationController
     }
   end
 
+  def profile_image_url(profile)
+    return nil unless profile&.image&.attached?
+
+    url_for(profile.image)
+  end
+
   def participations_list(recruitment)
     recruitment.participations.includes(user: :profile).map do |p|
       {
@@ -115,7 +122,8 @@ class Api::V1::RecruitmentsController < ApplicationController
         user: {
           id: p.user.id,
           email: p.user.email,
-          name: p.user.profile&.name
+          name: p.user.profile&.name,
+          image_url: profile_image_url(p.user.profile)
         }
       }
     end
