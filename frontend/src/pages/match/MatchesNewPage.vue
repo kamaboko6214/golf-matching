@@ -22,22 +22,14 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="flex flex-col gap-1.5">
+          <div class="flex flex-col gap-1.5 min-w-0">
             <label class="label-dark">プレー日</label>
             <DatePicker v-model="form.play_date" dateFormat="yy/mm/dd" placeholder="日付を選択" showIcon class="w-full" />
           </div>
-          <div class="flex flex-col gap-1.5">
+          <div class="flex flex-col gap-1.5 min-w-0">
             <label class="label-dark">募集人数</label>
-            <InputNumber
-              v-model="form.needed_players"
-              :min="1"
-              :max="10"
-              showButtons
-              buttonLayout="horizontal"
-              class="w-full"
-              style="width: 100%;"
-              :pt="{ input: { style: 'min-width: 0; flex: 1;' } }"
-            >
+            <InputNumber v-model="form.needed_players" :min="1" :max="10" showButtons buttonLayout="horizontal" fluid
+              inputClass="min-w-0 flex-1">
               <template #decrementbuttonicon><span class="pi pi-minus" /></template>
               <template #incrementbuttonicon><span class="pi pi-plus" /></template>
             </InputNumber>
@@ -51,13 +43,9 @@
 
         <div class="flex flex-col gap-1.5">
           <label class="label-dark">コース画像</label>
-          <div
-            class="rounded-xl p-6 text-center cursor-pointer transition"
+          <div class="rounded-xl p-6 text-center cursor-pointer transition"
             :style="`border: 2px dashed var(--border-drop); background: var(--bg-drop);`"
-            @click="$refs.fileInput.click()"
-            @dragover.prevent
-            @drop.prevent="onDrop"
-          >
+            @click="$refs.fileInput.click()" @dragover.prevent @drop.prevent="onDrop">
             <div v-if="imagePreview">
               <img :src="imagePreview" class="max-h-40 mx-auto rounded-lg object-cover" />
               <p class="text-xs mt-2" :style="`color: var(--text-faint);`">クリックして変更</p>
@@ -76,7 +64,8 @@
           <Select v-model="form.prefecture" :options="prefectures" placeholder="選択してください" class="w-full" filter />
         </div>
 
-        <div v-if="errorMsg" class="text-sm px-4 py-3 rounded-lg bg-red-100 text-red-700 border border-red-200 dark:bg-red-950/30 dark:text-red-400 dark:border-red-800/30">
+        <div v-if="errorMsg"
+          class="text-sm px-4 py-3 rounded-lg bg-red-100 text-red-700 border border-red-200 dark:bg-red-950/30 dark:text-red-400 dark:border-red-800/30">
           {{ errorMsg }}
         </div>
 
@@ -148,6 +137,7 @@ const handleSubmit = async () => {
   }
 }
 
+// ファイル選択
 const onFileChange = (e) => {
   const file = e.target.files[0]
   if (!file) return

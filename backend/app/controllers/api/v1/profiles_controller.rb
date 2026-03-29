@@ -31,7 +31,7 @@ class Api::V1::ProfilesController < ApplicationController
   private
 
   def profile_params
-    params.require(:profile).permit(:name, :average_score, :prefecture, :bio)
+    params.require(:profile).permit(:name, :average_score, :prefecture, :bio, :image)
   end
 
   def profile_json(profile)
@@ -41,7 +41,8 @@ class Api::V1::ProfilesController < ApplicationController
       average_score: profile.average_score,
       prefecture: profile.prefecture,
       bio: profile.bio,
-      email: current_user.email
+      email: current_user.email,
+      image_url: profile.image.attached? ? url_for(profile.image) : nil
     }
   end
 end

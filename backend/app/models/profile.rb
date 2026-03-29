@@ -1,5 +1,6 @@
 class Profile < ApplicationRecord
     belongs_to :user
+    has_one_attached :image
 
     validates :name, presence: true, length: { maximum: 50 }
     validates :average_score, presence: true, numericality: {
@@ -8,4 +9,5 @@ class Profile < ApplicationRecord
       allow_nil: true
     }
   validates :bio, length: { maximum: 500 }
+
 end
