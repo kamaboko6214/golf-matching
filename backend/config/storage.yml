@@ -21,6 +21,8 @@ cloudflare_r2:
   region: auto
   bucket: <%= ENV["R2_BUCKET"] %>
   endpoint: <%= ENV["R2_ENDPOINT"] %>
+  upload: { checksum_algorithm: crc32 }
+
 # Remember not to checkin your GCS keyfile to a repository
 # google:
 #   service: GCS
