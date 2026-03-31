@@ -128,7 +128,7 @@ onMounted(async () => {
     const payload = JSON.parse(atob(token.split('.')[1]))
     currentUserId.value = parseInt(payload.sub)
 
-    const wsUrl = `ws://localhost:3000/cable?token=${token}`
+    const wsUrl = `${import.meta.env.VITE_WS_URL}/cable?token=${token}`
     consumer = createConsumer(wsUrl)
     subscription = consumer.subscriptions.create(
       { channel: 'ChatChannel', chat_id: route.params.id },
