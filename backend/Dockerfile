@@ -18,4 +18,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD bash -c "bundle exec rails db:migrate && bundle exec rails db:seed && bundle exec puma -C config/puma.rb"
+CMD bash -c "mkdir -p tmp/pids && bundle exec rails db:migrate && bundle exec rails db:seed && bundle exec puma -C config/puma.rb"
