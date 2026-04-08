@@ -32,10 +32,11 @@ class Recruitment < ApplicationRecord
     recruitments = recruitments.from_date(params[:from_date]) if params[:from_date].present?
     recruitments = recruitments.to_date(params[:to_date]) if params[:to_date].present?
     recruitments = recruitments.by_keyword(params[:keyword]) if params[:keyword].present?
-    recruitments.recent
+    recruitments.open.recent
   end
 
   private
+
   def play_date_cannot_be_in_the_past
     if play_date.present? && play_date < Date.today
       errors.add(:play_date, "は今日以降の日付を選択してください")

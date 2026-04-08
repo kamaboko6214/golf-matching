@@ -3,7 +3,7 @@ class Api::V1::RecruitmentsController < ApplicationController
   before_action :set_recruitment, only: [:show, :edit, :update, :destroy]
   
   def index
-    recruitments = Recruitment.search(search_params).includes(user: { profile: { image_attachment: :blob } })
+    recruitments = Recruitment.search(search_params).includes(user: { profile: { image_attachment: :blob } }, participations: { user: :profile })
     render json: recruitments.map { |r| recruitment_json(r, current_user) }
   end
   
@@ -52,7 +52,7 @@ class Api::V1::RecruitmentsController < ApplicationController
   private
 
   def set_recruitment
-    @recruitment = Recruitment.includes(user: { profile: { image_attachment: :blob } }).find(params[:id])
+    @recruitment = Recruitment.includes(user: { profile: { image_attachment: :blob } }, participations: { user: :profile }).find(params[:id])
   end
 
   def search_params

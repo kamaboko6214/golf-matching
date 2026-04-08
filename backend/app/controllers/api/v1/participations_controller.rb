@@ -48,36 +48,38 @@ class Api::V1::ParticipationsController < ApplicationController
       return render json: { error: "不正なステータスです" }, status: :unprocessable_content
     end
 
-    if participation.update(status: params[:status])
-      # 承認時にチャットルームを作成
-      if participation.approved?
-        create_chat(participation)
-        # 申請者に承認通知
-        Notification.create!(
-          user: participation.user,
-          title: "参加が承認されました",
-          body: "「#{participation.recruitment.title}」への参加が承認されました！チャットを開始しましょう",
-          read: false,
-          notifiable: participation.recruitment
-        )
-      else
-        # 申請者に却下通知
-        Notification.create!(
-          user: participation.user,
-          title: "参加申請が却下されました",
-          body: "「#{participation.recruitment.title}」への参加申請が却下されました",
-          read: false,
-          notifiable: participation.recruitment
-        )
-      end
+    ActiveRecord::Base.transaction do
+      if participation.update(status: params[:status])
+        # 承認時にチャットルームを作成
+        if participation.approved?
+          create_chat(participation)
+          # 申請者に承認通知
+          Notification.create!(
+            user: participation.user,
+            title: "参加が承認されました",
+            body: "「#{participation.recruitment.title}」への参加が承認されました！チャットを開始しましょう",
+            read: false,
+            notifiable: participation.recruitment
+          )
+        else
+          # 申請者に却下通知
+          Notification.create!(
+            user: participation.user,
+            title: "参加申請が却下されました",
+            body: "「#{participation.recruitment.title}」への参加申請が却下されました",
+            read: false,
+            notifiable: participation.recruitment
+          )
+        end
 
-      render json: {
-        id: participation.id,
-        status: participation.status,
-        message: participation.approved? ? "承認しました" : "却下しました"
-      }
-    else
-      render json: { errors: participation.errors.full_messages }, status: :unprocessable_content
+        render json: {
+          id: participation.id,
+          status: participation.status,
+          message: participation.approved? ? "承認しました" : "却下しました"
+        }
+      else
+        render json: { errors: participation.errors.full_messages }, status: :unprocessable_content
+      end
     end
   end
 
