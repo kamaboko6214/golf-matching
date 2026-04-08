@@ -3,7 +3,7 @@
     <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
 
       <router-link to="/matches" class="flex items-center gap-2.5 flex-shrink-0">
-        <span class="text-xl leading-none">⛳</span>
+        <span class="text-xl leading-none"><img src="/golf_matching_favicon.png" alt="Golf Matching" class="w-8 h-8"></span>
         <span style="font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.12em; color: #a3e635;">
           GOLF<em class="not-italic" :style="`color: var(--text-title);`">MATCH</em>
         </span>
@@ -22,15 +22,6 @@
         </router-link>
 
         <!-- テーマトグル -->
-        <button
-          @click="toggle"
-          class="w-8 h-8 flex items-center justify-center rounded-lg transition text-base"
-          :style="`color: var(--text-muted);`"
-          :title="isDark ? 'ライトモードに切替' : 'ナイトモードに切替'"
-        >
-          {{ isDark ? '☀️' : '🌙' }}
-        </button>
-
         <!-- 通知ベル -->
         <div class="relative">
           <button
@@ -115,7 +106,6 @@ import api from '../lib/api.js'
 import { useTheme } from '../lib/useTheme.js'
 
 const router = useRouter()
-const { isDark, toggle } = useTheme()
 const notifications = ref([])
 const unreadCount = ref(0)
 const showNotifications = ref(false)

@@ -11,7 +11,7 @@
       <!-- Left panel -->
       <div class="hidden md:flex flex-[1.1] flex-col gap-9 p-12 bg-gradient-to-br from-[#133a1a] via-[#0d2b12] to-[#071a09] border-r border-[rgba(180,230,100,0.12)]">
         <div class="flex items-center gap-2.5">
-          <span class="text-[22px]">⛳</span>
+          <span class="text-[22px]"><img src="/golf_matching_favicon.png" alt="Golf Matching" class="w-8 h-8"></span>
           <span class="font-['Bebas_Neue'] text-[22px] tracking-[0.12em] text-[#c8e87a]">
             GOLF<em class="not-italic text-white">MATCH</em>
           </span>
