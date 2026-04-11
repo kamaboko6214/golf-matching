@@ -18,7 +18,13 @@
               class="w-16 h-16 rounded-full flex items-center justify-center text-3xl flex-shrink-0"
               :style="`background: var(--avatar-bg); border: 2px solid var(--avatar-border);`"
             >
-              🏌️
+              <img
+                v-if="user.image_url"
+                :src="user.image_url"
+                alt=""
+                class="w-16 h-16 rounded-full object-cover"
+              />
+              <p v-else class="text-3xl">🏌️</p>
             </div>
             <div>
               <h1 class="text-xl font-black c-text" style="font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.05em;">

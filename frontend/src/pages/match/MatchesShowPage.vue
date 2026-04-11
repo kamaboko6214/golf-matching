@@ -69,9 +69,14 @@
               </div>
               <div class="flex flex-col gap-1">
                 <span class="label-dark">投稿者</span>
-                <span class="text-sm font-bold transition hover:underline cursor-pointer" :style="`color: var(--text);`"
+                <span class="flex items-center gap-2 text-sm font-bold transition hover:underline cursor-pointer" :style="`color: var(--text);`"
                   @click.stop="$router.push(`/users/${recruitment.user.id}`)">
-                  🏌️ {{ recruitment.user?.name || recruitment.user?.email }}
+                  <img
+                    v-if="recruitment.user?.image_url"
+                    :src="recruitment.user.image_url"
+                    alt=""
+                    class="w-6 h-6 rounded-full object-cover flex-shrink-0 border border-[var(--avatar-border)]"
+                  />{{ recruitment.user?.name || recruitment.user?.email }}
                 </span>
               </div>
               <div class="flex flex-col gap-1">

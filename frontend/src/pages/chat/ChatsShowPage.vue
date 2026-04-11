@@ -29,44 +29,33 @@
       <!-- メッセージ一覧 -->
       <div ref="messageContainer" class="flex-1 overflow-y-auto flex flex-col gap-3 pb-4">
         <div v-if="loading" class="flex justify-center py-10">
-          <div class="w-8 h-8 border-2 rounded-full animate-spin" :style="`border-color: var(--border-card); border-top-color: #a3e635;`"></div>
+          <div class="w-8 h-8 border-2 rounded-full animate-spin"
+            :style="`border-color: var(--border-card); border-top-color: #a3e635;`"></div>
         </div>
 
         <template v-else>
-          <div
-            v-for="message in messages"
-            :key="message.id"
-            class="flex gap-3"
-            :class="message.user.id === currentUserId ? 'flex-row-reverse' : ''"
-          >
-            <div
-              class="w-8 h-8 rounded-full flex items-center justify-center text-sm flex-shrink-0"
-              :style="`background: var(--avatar-bg); border: 1px solid var(--avatar-border);`"
-            >
-              🏌️
+          <div v-for="message in messages" :key="message.id" class="flex gap-3"
+            :class="message.user.id === currentUserId ? 'flex-row-reverse' : ''">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm flex-shrink-0"
+              :style="`background: var(--avatar-bg); border: 1px solid var(--avatar-border);`">
+              <img v-if="message.user?.image_url" :src="message.user.image_url" alt=""
+                class="w-6 h-6 rounded-full object-cover flex-shrink-0 border border-[var(--avatar-border)]" />
+              <span v-else>🏌️</span>
             </div>
             <div class="max-w-xs" :class="message.user.id === currentUserId ? 'items-end' : 'items-start'">
-              <p
-                class="text-xs mb-1"
-                :style="`color: var(--text-faint);`"
-                :class="message.user.id === currentUserId ? 'text-right' : ''"
-              >
+              <p class="text-xs mb-1" :style="`color: var(--text-faint);`"
+                :class="message.user.id === currentUserId ? 'text-right' : ''">
                 {{ message.user.name }}
               </p>
-              <div
-                class="px-4 py-2.5 rounded-2xl text-sm leading-relaxed"
+              <div class="px-4 py-2.5 rounded-2xl text-sm leading-relaxed"
                 :class="message.user.id === currentUserId ? 'rounded-tr-sm' : 'rounded-tl-sm'"
                 :style="message.user.id === currentUserId
                   ? 'background: linear-gradient(135deg, #166534, #14532d); color: #a3e635;'
-                  : `background: var(--bg-chat-other); border: 1px solid var(--border-chat-other); color: var(--text);`"
-              >
+                  : `background: var(--bg-chat-other); border: 1px solid var(--border-chat-other); color: var(--text);`">
                 {{ message.body }}
               </div>
-              <p
-                class="text-xs mt-1"
-                :style="`color: var(--text-faint);`"
-                :class="message.user.id === currentUserId ? 'text-right' : ''"
-              >
+              <p class="text-xs mt-1" :style="`color: var(--text-faint);`"
+                :class="message.user.id === currentUserId ? 'text-right' : ''">
                 {{ formatTime(message.created_at) }}
               </p>
             </div>
@@ -75,24 +64,12 @@
       </div>
 
       <!-- 入力エリア -->
-      <div
-        class="flex items-center gap-3 px-4 py-3 mt-2 rounded-2xl flex-shrink-0"
-        :style="`background: var(--bg-chat-input); border: 1px solid var(--border-chat-input);`"
-      >
-        <input
-          v-model="newMessage"
-          @keydown.enter.prevent="sendMessage"
-          type="text"
-          placeholder="メッセージを入力..."
-          class="flex-1 text-sm outline-none bg-transparent"
-          :style="`color: var(--text);`"
-        />
-        <button
-          @click="sendMessage"
-          :disabled="!newMessage.trim()"
-          class="btn-primary disabled:opacity-40"
-          style="font-size: 0.8rem; padding: 0.5rem 1rem;"
-        >
+      <div class="flex items-center gap-3 px-4 py-3 mt-2 rounded-2xl flex-shrink-0"
+        :style="`background: var(--bg-chat-input); border: 1px solid var(--border-chat-input);`">
+        <input v-model="newMessage" @keydown.enter.prevent="sendMessage" type="text" placeholder="メッセージを入力..."
+          class="flex-1 text-sm outline-none bg-transparent" :style="`color: var(--text);`" />
+        <button @click="sendMessage" :disabled="!newMessage.trim()" class="btn-primary disabled:opacity-40"
+          style="font-size: 0.8rem; padding: 0.5rem 1rem;">
           送信
         </button>
       </div>

@@ -48,8 +48,15 @@ class Api::V1::ChatsController < ApplicationController
       created_at: message.created_at,
       user: {
         id: message.user.id,
-        name: message.user.profile&.name || message.user.email
+        name: message.user.profile&.name || message.user.email,
+        image_url: profile_image_url(message.user.profile)
       }
     }
+  end
+
+  def profile_image_url(profile)
+    return nil unless profile&.image&.attached?
+
+    url_for(profile.image)
   end
 end
