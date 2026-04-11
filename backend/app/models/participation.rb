@@ -3,6 +3,7 @@ class Participation < ApplicationRecord
   belongs_to :recruitment
   belongs_to :chat, optional: true
 
+  # enum を定義することで範囲外の値は ArgumentError で自動的に弾かれる
   enum :status, { pending: 'pending', approved: 'approved', rejected: 'rejected' }
 
   validate :cannot_apply_own_recruitment

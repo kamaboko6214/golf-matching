@@ -12,6 +12,7 @@ class Api::V1::UsersController < ApplicationController
       average_score: profile&.average_score,
       prefecture: profile&.prefecture,
       bio: profile&.bio,
+      image_url: profile_image_url(profile),
       recruitments: user.recruitments.open.order(created_at: :desc).limit(5).map do |r|
         {
           id: r.id,
@@ -23,5 +24,13 @@ class Api::V1::UsersController < ApplicationController
         }
       end
     }
+  end
+
+  private
+
+  def profile_image_url(profile)
+    return nil unless profile&.image&.attached?
+
+    url_for(profile.image)
   end
 end

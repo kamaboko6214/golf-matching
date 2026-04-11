@@ -1,10 +1,11 @@
 class Api::V1::ParticipationsController < ApplicationController
   before_action :authenticate_user!
 
+  # 参加申請を作成する
+  # 自分の募集への申請はコントローラー層で早期リターン（モデルのバリデーションと二重チェック）
   def create
     recruitment = Recruitment.find(params[:recruitment_id])
 
-    # 自分の募集には参加できない（権限エラーとして返す）
     if recruitment.user_id == current_user.id
       return render json: { error: "自分の募集には参加できません" }, status: :forbidden
     end
@@ -16,7 +17,7 @@ class Api::V1::ParticipationsController < ApplicationController
     )
 
     if participation.save
-      # 参加申請があったことを募集の作成者に通知
+      # 募集の作成者に申請通知を送る
       Notification.create!(
         user: recruitment.user,
         title: "参加申請が届きました",
@@ -35,25 +36,23 @@ class Api::V1::ParticipationsController < ApplicationController
     end
   end
 
+  # 参加申請を承認または却下する（募集の作成者のみ操作可能）
   def update
     participation = Participation.find(params[:id])
 
-    # 募集の作成者のみが承認・却下できる
     unless participation.recruitment.user_id == current_user.id
       return render json: { error: "権限がありません" }, status: :forbidden
     end
 
-    # 許可する値だけ受け付ける
-      unless %w[approved rejected].include?(params[:status])
+    unless %w[approved rejected].include?(params[:status])
       return render json: { error: "不正なステータスです" }, status: :unprocessable_content
     end
 
+    # チャット作成・通知・ステータス更新を一括でコミットし、途中失敗時はロールバックする
     ActiveRecord::Base.transaction do
       if participation.update(status: params[:status])
-        # 承認時にチャットルームを作成
         if participation.approved?
           create_chat(participation)
-          # 申請者に承認通知
           Notification.create!(
             user: participation.user,
             title: "参加が承認されました",
@@ -62,7 +61,6 @@ class Api::V1::ParticipationsController < ApplicationController
             notifiable: participation.recruitment
           )
         else
-          # 申請者に却下通知
           Notification.create!(
             user: participation.user,
             title: "参加申請が却下されました",
@@ -85,10 +83,11 @@ class Api::V1::ParticipationsController < ApplicationController
 
   private
 
+  # 承認時にチャットルームを作成し、投稿者と参加者を追加する
+  # 同一募集に複数人が承認された場合は既存チャットルームに追加する（1募集1チャット）
   def create_chat(participation)
     recruitment = participation.recruitment
-  
-    # チャットルームがなければ作成（初回承認時）
+
     if recruitment.chat.nil?
       chat = Chat.create!
       chat.chat_members.create!(user: recruitment.user)
@@ -96,12 +95,11 @@ class Api::V1::ParticipationsController < ApplicationController
     else
       chat = recruitment.chat
     end
-  
-    # 参加者を追加
+
     unless chat.users.include?(participation.user)
       chat.chat_members.create!(user: participation.user)
     end
-  
+
     participation.update!(chat: chat)
   end
 end

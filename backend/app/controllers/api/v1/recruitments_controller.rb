@@ -1,8 +1,10 @@
 class Api::V1::RecruitmentsController < ApplicationController
   before_action :authenticate_user!
+  # show/edit/update/destroy では共通の募集取得処理を実行する
   before_action :set_recruitment, only: [:show, :edit, :update, :destroy]
-  
+
   def index
+    # N+1対策: user.profile・画像・participations を一括取得する
     recruitments = Recruitment.search(search_params).includes(user: { profile: { image_attachment: :blob } }, participations: { user: :profile })
     render json: recruitments.map { |r| recruitment_json(r, current_user) }
   end
@@ -11,6 +13,7 @@ class Api::V1::RecruitmentsController < ApplicationController
     render json: recruitment_json(@recruitment, current_user)
   end
 
+  # フロントエンドの編集フォーム用に現在値を返す
   def edit
     if @recruitment.user_id == current_user.id
       render json: edit_recruitment_json(@recruitment)
@@ -51,6 +54,7 @@ class Api::V1::RecruitmentsController < ApplicationController
   
   private
 
+  # N+1対策: 募集詳細ページで必要な関連データを一括取得する
   def set_recruitment
     @recruitment = Recruitment.includes(user: { profile: { image_attachment: :blob } }, participations: { user: :profile }).find(params[:id])
   end
@@ -66,7 +70,8 @@ class Api::V1::RecruitmentsController < ApplicationController
     )
   end
 
-  # responseのフォーマット
+  # 募集情報のレスポンス形式を組み立てる
+  # viewer を渡すことで「自分の申請状況」「オーナーかどうか」を付加できる
   def recruitment_json(recruitment, viewer = nil)
     {
       id: recruitment.id,
@@ -84,10 +89,13 @@ class Api::V1::RecruitmentsController < ApplicationController
         name: recruitment.user.profile&.name,
         image_url: profile_image_url(recruitment.user.profile)
       },
-      participations_count: recruitment.participations.count,
+      # .size はインクルード済みの場合はSQLを発行せずメモリ内で数える
+      participations_count: recruitment.participations.size,
       my_chat_id: recruitment.chat_id,
-      my_participation: viewer ? recruitment.participations.find_by(user: viewer)&.status : nil,
+      # ロード済みの配列から検索することでN+1を防ぐ
+      my_participation: viewer ? recruitment.participations.find { |p| p.user_id == viewer.id }&.status : nil,
       is_owner: viewer ? recruitment.user_id == viewer.id : false,
+      # 投稿者にのみ申請者一覧を返す
       participations: viewer && recruitment.user_id == viewer.id ? participations_list(recruitment) : [],
       image_url: recruitment.image.attached? ? url_for(recruitment.image) : nil
     }
@@ -114,7 +122,8 @@ class Api::V1::RecruitmentsController < ApplicationController
   end
 
   def participations_list(recruitment)
-    recruitment.participations.includes(user: :profile).map do |p|
+    # includes済みのためSQLは発行されない
+    recruitment.participations.map do |p|
       {
         id: p.id,
         status: p.status,

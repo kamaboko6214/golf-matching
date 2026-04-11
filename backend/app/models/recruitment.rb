@@ -4,7 +4,7 @@ class Recruitment < ApplicationRecord
   has_many :participations, dependent: :destroy
   has_many :participants, through: :participations, source: :user
   has_one_attached :image
-  
+
   validates :title, presence: true, length: { maximum: 100 }
   validates :description, length: { maximum: 1000 }
   validates :course_name, length: { maximum: 100 }
@@ -18,21 +18,24 @@ class Recruitment < ApplicationRecord
   validates :status, inclusion: { in: %w[open closed] }
   validate :play_date_cannot_be_in_the_past
 
+  # 募集中の案件のみを返す
   scope :open, -> { where(status: 'open') }
   scope :by_prefecture, ->(pref) { where(prefecture: pref) }
   scope :from_date, ->(date) { where('play_date >= ?', date) }
   scope :to_date, ->(date) { where('play_date <= ?', date) }
+  # ILIKE で大文字小文字を区別せずタイトル・説明・コース名を横断検索する
   scope :by_keyword, ->(keyword) { where('title ILIKE ? OR description ILIKE ? OR course_name ILIKE ?', "%#{keyword}%", "%#{keyword}%", "%#{keyword}%") }
-
   scope :recent, -> { order(created_at: :desc) }
 
-  def self.search(params)                        
-    recruitments = Recruitment.all
+  # 複数の検索条件を組み合わせて募集を絞り込む
+  # 条件が渡されなかった場合はそのスコープをスキップする
+  def self.search(params)
+    recruitments = Recruitment.open
     recruitments = recruitments.by_prefecture(params[:prefecture]) if params[:prefecture].present?
     recruitments = recruitments.from_date(params[:from_date]) if params[:from_date].present?
     recruitments = recruitments.to_date(params[:to_date]) if params[:to_date].present?
     recruitments = recruitments.by_keyword(params[:keyword]) if params[:keyword].present?
-    recruitments.open.recent
+    recruitments.recent
   end
 
   private
