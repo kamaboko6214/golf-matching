@@ -32,16 +32,8 @@
           </div>
           <div class="flex flex-col gap-1.5">
             <label class="label-dark">募集人数</label>
-            <InputNumber
-              v-model="form.needed_players"
-              :min="1"
-              :max="10"
-              showButtons
-              buttonLayout="horizontal"
-              class="w-full"
-              style="width: 100%;"
-              :pt="{ input: { style: 'min-width: 0; flex: 1;' } }"
-            >
+            <InputNumber v-model="form.needed_players" :min="1" :max="10" showButtons buttonLayout="horizontal" fluid
+              inputClass="min-w-0 flex-1">
               <template #decrementbuttonicon><span class="pi pi-minus" /></template>
               <template #incrementbuttonicon><span class="pi pi-plus" /></template>
             </InputNumber>
