@@ -28,9 +28,12 @@
             </div>
             <div class="flex flex-col gap-1.5">
               <label class="label-dark">都道府県</label>
-              <select
+              <Select
                 v-model="filters.prefecture"
-                class="input-dark"
+                :options="prefectures"
+                placeholder="選択してください"
+                class="w-full"
+                filter
                 @change="fetchRecruitments"
               >
                 <option value="" :style="`background: var(--select-option-bg);`">すべて</option>
@@ -42,7 +45,7 @@
               <input
                 v-model="filters.from_date"
                 type="date"
-                class="input-dark"
+                class="input-dark cursor-pointer"
                 @change="fetchRecruitments"
               />
             </div>
@@ -166,6 +169,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import api from '../../lib/api.js'
+import Select from 'primevue/select'
 import AppHeader from '../../components/AppHeader.vue'
 import { prefectures } from '../../constants/prefectures.js'
 
