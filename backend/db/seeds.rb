@@ -12,8 +12,6 @@ users = [
 created_users = users.map do |user|
   User.find_or_create_by!(email: user[:email]) do |u|
     u.password = "password123"
-    u.name = user[:name]
-    u.average_score = user[:average_score]
   end
 end
 
